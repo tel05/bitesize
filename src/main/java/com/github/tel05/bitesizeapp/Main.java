@@ -4,8 +4,15 @@ import java.util.*;
 
 import static com.github.tel05.bitesizeapp.RestaurantData.getData;
 
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.model.GeocodingResult;
+
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
+    private static final String API_KEY = System.getenv("GOOGLE_API_KEY");
+
+
 
     /**
      * Prompts the user to input the number of results they want to view (1-10)
@@ -51,7 +58,6 @@ public class Main {
      * @return The chosen sorting option as an integer (1 for distance, 2 for rating, 3 for price level).
      */
     public static int filter() {
-        Scanner scanner = new Scanner(System.in);
         int filter = 0;
         do {
             System.out.println("----------------------------------------------------------");
@@ -134,11 +140,39 @@ public class Main {
 
     public static void main(String[] args) {
 
+        boolean exit = false;
+        GeoApiContext context = new GeoApiContext.Builder()
+                                .apiKey(API_KEY)
+                                .build();
 
-
-        while (true) {
+        while (!exit) {
             printTitle();
             String zipcode = zipcode();
+            if(zipcode.equalsIgnoreCase("exit")){
+                exit = true;
+                continue;
+            }
+            // check validity of zip code else reprompt 
+            if(!ZipCodeValidator.isValidZipCode(zipcode)){
+                System.out.println("Invalid zipcode format.\n");
+                continue;  
+            }
+
+            // request coordinates with valid zip code.
+            Geocoding geocoder = new Geocoding(context);
+            double[] latLong = geocoder.getLatLongByZipCode(zipcode);
+            if (latLong != null) {
+                System.out.println("Latitude: " + latLong[0] + ", Longitude: " + latLong[1]);
+            } else {
+                System.out.println("Could not find coordinates for zipcode " + zipcode);
+            }
+
+
+
+            
+                    
+            
+            
             int numOptions = numOfResults();
 
             // Retrieve restaurant data based on zip code and populate the restaurant map.
@@ -249,5 +283,7 @@ public class Main {
 
             }
         }
+        scanner.close();
+        context.shutdown();
     }
 }
