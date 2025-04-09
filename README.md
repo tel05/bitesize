@@ -61,8 +61,8 @@ java -cp path/to/google-maps-services.jar:. com.github.tel05.bitesizeapp.Main
 📦 bitesizeapp/
  ┣ 📄 Main.java              // CLI logic + user flow
  ┣ 📄 Geocoding.java         // Gets coordinates from ZIP code
- ┣ 📄 NearbyRestaurants.java // Stores restaurant attributes (name, address, rating, etc.)
- ┣ 📄 Restaurant.java        // POJO with restaurant data
+ ┣ 📄 NearbyRestaurants.java // (planned) integration with Places API
+ ┣ 📄 Restaurant.java        // Stores restaurant attributes (name, address, rating, etc.)
  ┣ 📄 RestaurantData.java    // Mock data (optional, for testing)
  ┣ 📄 ZipCodeValidator.java  // Validates ZIP code format
  ┣ 📄 MinPQ.java             // Min-priority queue (distance, price)
